@@ -1,0 +1,12 @@
+# According to Docker documentation, this file must be in the root of the build context
+# https://docs.docker.com/engine/reference/builder/#dockerignore-file
+
+# ignore .git and .cache folders
+.git
+.cache
+
+.idea
+node_modules
+static
+dist
+__data__
