@@ -32,6 +32,7 @@ export const config: VendureConfig = {
             identifier: 'superadmin',
             password: 'superadmin',
         },
+        requireVerification: true,
         /*cookieOptions: {
             domain: 'localhost:4000',
             sameSite: 'strict',

@@ -8,4 +8,3 @@ RUN yarn
 COPY . .
 RUN chmod +x /usr/src/app/wait-for-it.sh
 RUN yarn build
-RUN ls -la

@@ -13,18 +13,6 @@ const rootDir = path.join(__dirname, '..');
 const emailTemplateDir = path.join(rootDir, 'static', 'email', 'templates');
 
 export async function setupWorker() {
-    /*let attempts = 0;
-    const maxAttempts = 10;
-    const pollIntervalMs = 2000;
-    while (attempts < maxAttempts) {
-        attempts++;
-        console.log('Checking for ', emailTemplateDir, `(attempt ${attempts})`);
-        if (fs.pathExistsSync(emailTemplateDir)) {
-            return true;
-        }
-        await new Promise(resolve => setTimeout(resolve, pollIntervalMs));
-    }
-    throw new Error(`Could not find expected files needed by worker.`);*/
     if (!fs.pathExistsSync(emailTemplateDir)) {
         await copyEmailTemplates();
     }
@@ -63,6 +51,7 @@ export async function setupServer() {
         try {
             console.log('populating customers...');
             await populateCustomers(10, populateConfig, true);
+            config.authOptions.requireVerification = true;
             return app.close();
         } catch (err) {
             console.log(err);
