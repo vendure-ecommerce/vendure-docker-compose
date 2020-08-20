@@ -12,7 +12,7 @@ This project can be used to explore Vendure, to perform performance or security 
 ## Usage
 
 1. Make sure you have [Docker installed](https://docs.docker.com/get-docker/)
-2. Clone this repo `git clone git@github.com:vendure-ecommerce/vendure-docker.git --depth 1`
+2. Clone this repo `git clone git@github.com:vendure-ecommerce/vendure-docker-compose.git --depth 1`
 3. From the project root run `docker-compose up`
 
 The initial run will take some minutes to build all the containers and populate some test data.
