@@ -63,6 +63,7 @@ export const config: VendureConfig = {
             route: 'assets',
             assetUploadDir: path.join(__dirname, '../static/assets'),
             port: 3001,
+            assetUrlPrefix: 'http://localhost:3000/assets/',
         }),
         DefaultJobQueuePlugin,
         DefaultSearchPlugin,
