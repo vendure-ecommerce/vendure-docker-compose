@@ -1,23 +1,12 @@
-import { bootstrapWorker, mergeConfig, VendureConfig } from '@vendure/core';
+import { bootstrapWorker } from '@vendure/core';
 
 import { config } from './vendure-config';
 import { setupWorker } from './setup';
 
-const workerConfig: VendureConfig = mergeConfig(
-    config,
-    {
-        workerOptions: {
-            options: {
-                host: process.env.WORKER_REMOTE ? '0.0.0.0' : 'localhost',
-                port: Number(process.env.WORKER_PORT) || 3020,
-            },
-        },
-    }
-);
-
 setupWorker()
-    .then(() => bootstrapWorker(workerConfig))
+    .then(() => bootstrapWorker(config))
+    .then(worker => worker.startJobQueue())
     .catch((err) => {
-    console.log(err);
-    process.exit(1);
-});
+        console.log(err);
+        process.exit(1);
+    });

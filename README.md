@@ -17,4 +17,5 @@ This project can be used to explore Vendure, to perform performance or security 
 
 The initial run will take some minutes to build all the containers and populate some test data.
 
-
+* Admin UI: http://localhost:3000/admin/
+* Storefront: http://localhost:4000

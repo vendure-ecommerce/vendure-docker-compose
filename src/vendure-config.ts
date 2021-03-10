@@ -1,12 +1,7 @@
-import {
-    examplePaymentHandler,
-    DefaultJobQueuePlugin,
-    DefaultSearchPlugin,
-    VendureConfig,
-} from '@vendure/core';
+import { DefaultJobQueuePlugin, DefaultSearchPlugin, dummyPaymentHandler, VendureConfig, } from '@vendure/core';
 import { AssetServerPlugin } from '@vendure/asset-server-plugin';
 import { AdminUiPlugin } from '@vendure/admin-ui-plugin';
-import { EmailPlugin, defaultEmailHandlers } from '@vendure/email-plugin';
+import { defaultEmailHandlers, EmailPlugin } from '@vendure/email-plugin';
 import path from 'path';
 
 export const config: VendureConfig = {
@@ -38,12 +33,6 @@ export const config: VendureConfig = {
             sameSite: 'strict',
         },*/
     },
-    workerOptions: {
-        options: {
-            host: process.env.WORKER_HOST || 'localhost',
-            port: Number(process.env.WORKER_PORT) || 3020,
-        },
-    },
     dbConnectionOptions: {
         type: 'postgres',
         synchronize: false, // turn this off for production
@@ -56,25 +45,25 @@ export const config: VendureConfig = {
         migrations: [path.join(__dirname, '../migrations/*.ts')],
     },
     paymentOptions: {
-        paymentMethodHandlers: [examplePaymentHandler],
+        paymentMethodHandlers: [dummyPaymentHandler],
     },
     customFields: {},
     plugins: [
         AssetServerPlugin.init({
             route: 'assets',
             assetUploadDir: path.join(__dirname, '../static/assets'),
-            port: 3001,
             assetUrlPrefix: 'http://localhost:3000/assets/',
         }),
         DefaultJobQueuePlugin,
         DefaultSearchPlugin,
         AdminUiPlugin.init({
+            route: 'admin',
             port: 3002,
         }),
         EmailPlugin.init({
+            route: 'mailbox',
             devMode: true,
             outputPath: path.join(__dirname, '../static/email/test-emails'),
-            mailboxPort: 3003,
             handlers: defaultEmailHandlers,
             templatePath: path.join(__dirname, '../static/email/templates'),
             globalTemplateVars: {

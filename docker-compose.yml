@@ -10,8 +10,6 @@ services:
     volumes:
       - /usr/src/app
     environment:
-      WORKER_HOST: worker
-      WORKER_PORT: 3020
       DATABASE_HOST: database
       DATABASE_PORT: 5432
     depends_on:
@@ -25,8 +23,6 @@ services:
     volumes:
       - /usr/src/app
     environment:
-      WORKER_REMOTE: 'true'
-      WORKER_PORT: 3020
       DATABASE_HOST: database
       DATABASE_PORT: 5432
     depends_on:
@@ -36,7 +32,7 @@ services:
       context: .
       dockerfile: Dockerfile-storefront
       args:
-        STOREFRONT_VERSION: 0.1.21
+        STOREFRONT_VERSION: 0.1.23
     ports:
       - 4000:4000
     environment:

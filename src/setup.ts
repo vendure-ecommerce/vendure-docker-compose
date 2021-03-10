@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { bootstrap, defaultConfig, mergeConfig, VendureConfig } from '@vendure/core';
+import { bootstrap, defaultConfig, mergeConfig, VendureConfig, JobQueueService } from '@vendure/core';
 import { populate } from '@vendure/core/cli';
 import { clearAllTables, populateCustomers } from '@vendure/testing';
 import path from 'path';
@@ -32,9 +32,6 @@ export async function setupServer() {
                 importExportOptions: {
                     importAssetsDir: path.join(require.resolve('@vendure/create'), '../assets/images'),
                 },
-                workerOptions: {
-                    runInMainProcess: true,
-                },
                 customFields: {},
             }),
         );
@@ -44,7 +41,10 @@ export async function setupServer() {
         await copyEmailTemplates();
         await clearAllTablesWithPolling(populateConfig);
         const app = await populate(
-            () => bootstrap(populateConfig),
+            () => bootstrap(populateConfig).then(async _app => {
+                await _app.get(JobQueueService).start();
+                return _app;
+            }),
             initialData,
             path.join(require.resolve('@vendure/create'), '../assets/products.csv'),
         );
