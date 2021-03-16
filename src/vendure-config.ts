@@ -6,6 +6,7 @@ import path from 'path';
 
 export const config: VendureConfig = {
     apiOptions: {
+        hostname: '0.0.0.0',
         port: 3000,
         adminApiPath: 'admin-api',
         adminApiPlayground: {
