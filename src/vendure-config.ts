@@ -41,8 +41,8 @@ export const config: VendureConfig = {
         database: 'vendure',
         host: process.env.DATABASE_HOST || 'localhost',
         port: Number(process.env.DATABASE_PORT) || 5432,
-        username: 'postgres',
-        password: 'password',
+        username: process.env.POSTGRES_USER || 'postgres',
+        password: process.env.POSTGRES_PASSWORD || 'password',
         migrations: [path.join(__dirname, '../migrations/*.ts')],
     },
     paymentOptions: {
