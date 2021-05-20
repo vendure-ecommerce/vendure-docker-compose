@@ -29,10 +29,9 @@ export const config: VendureConfig = {
             password: 'superadmin',
         },
         requireVerification: true,
-        /*cookieOptions: {
-            domain: 'localhost:4000',
-            sameSite: 'strict',
-        },*/
+        cookieOptions: {
+            secret: process.env.COOKIE_SECRET || '3r8wq8jdo92',
+        },
     },
     dbConnectionOptions: {
         type: 'postgres',

@@ -8,18 +8,18 @@
     "run:worker": "node dist/index-worker.js"
   },
   "dependencies": {
-    "@vendure/admin-ui-plugin": "1.0.0-beta.2",
-    "@vendure/asset-server-plugin": "1.0.0-beta.2",
-    "@vendure/core": "1.0.0-beta.2",
-    "@vendure/email-plugin": "1.0.0-beta.2",
+    "@vendure/admin-ui-plugin": "^1.0.0",
+    "@vendure/asset-server-plugin": "^1.0.0",
+    "@vendure/core": "^1.0.0",
+    "@vendure/email-plugin": "^1.0.0",
     "pg": "^8.4.1",
     "typescript": "4.0.3"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.1",
     "@types/node": "^14.6.0",
-    "@vendure/create": "1.0.0-beta.2",
-    "@vendure/testing": "1.0.0-beta.2",
+    "@vendure/create": "^1.0.0",
+    "@vendure/testing": "^1.0.0",
     "fs-extra": "^9.0.1"
   }
 }
