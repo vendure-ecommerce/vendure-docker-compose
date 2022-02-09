@@ -7,6 +7,5 @@
 
 .idea
 node_modules
-static
 dist
 __data__

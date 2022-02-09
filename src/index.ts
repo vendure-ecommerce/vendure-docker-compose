@@ -1,11 +1,7 @@
 import { bootstrap } from '@vendure/core';
-
 import { config } from './vendure-config';
-import { setupServer } from './setup';
 
-setupServer()
-    .then(() => bootstrap(config))
-    .catch((err) => {
-        console.log(err);
-        process.exit(1);
-    });
+bootstrap(config).catch(err => {
+    // tslint:disable-next-line:no-console
+    console.log(err);
+});
