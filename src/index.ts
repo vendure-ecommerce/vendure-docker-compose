@@ -1,7 +1,10 @@
-import { bootstrap } from '@vendure/core';
-import { config } from './vendure-config';
+import { bootstrap } from "@vendure/core";
+import { setupServer } from "./setup";
+import { config } from "./vendure-config";
 
-bootstrap(config).catch(err => {
+setupServer()
+  .then(() => bootstrap(config))
+  .catch((err) => {
     // tslint:disable-next-line:no-console
     console.log(err);
-});
+  });
