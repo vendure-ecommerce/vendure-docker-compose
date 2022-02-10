@@ -9,3 +9,4 @@
 node_modules
 dist
 __data__
+package-lock.json
