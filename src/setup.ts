@@ -2,15 +2,14 @@
 import {
   bootstrap,
   defaultConfig,
+  JobQueueService,
   mergeConfig,
   VendureConfig,
-  JobQueueService,
 } from "@vendure/core";
 import { populate } from "@vendure/core/cli";
 import { clearAllTables, populateCustomers } from "@vendure/testing";
-import path from "path";
 import fs from "fs-extra";
-
+import path from "path";
 import { config } from "./vendure-config";
 
 // tslint:disable:no-console
@@ -24,10 +23,13 @@ export async function setupWorker() {
   }
 }
 
-export async function setupServer() {
+export async function setupServer(populateInitial = true) {
   console.log("isInitialRun:", isInitialRun());
   if (isInitialRun()) {
     console.log("Initial run - populating test data...");
+
+    await createDirectoryStructure();
+    await copyEmailTemplates();
     const populateConfig = mergeConfig(
       defaultConfig,
       mergeConfig(config, {
@@ -45,30 +47,33 @@ export async function setupServer() {
       })
     );
 
-    const initialData = require(path.join(
-      require.resolve("@vendure/create"),
-      "../assets/initial-data.json"
-    ));
-    await createDirectoryStructure();
-    await copyEmailTemplates();
-    await clearAllTablesWithPolling(populateConfig);
-    const app = await populate(
-      () =>
-        bootstrap(populateConfig).then(async (_app) => {
-          await _app.get(JobQueueService).start();
-          return _app;
-        }),
-      initialData,
-      path.join(require.resolve("@vendure/create"), "../assets/products.csv")
-    );
-    try {
-      console.log("populating customers...");
-      await populateCustomers(app, 10, console.log);
-      config.authOptions.requireVerification = true;
-      return app.close();
-    } catch (err) {
-      console.log(err);
-      process.exit(1);
+    if (populateInitial) {
+      const initialData = require(path.join(
+        require.resolve("@vendure/create"),
+        "../assets/initial-data.json"
+      ));
+
+      await clearAllTablesWithPolling(populateConfig);
+
+      const app = await populate(
+        () =>
+          bootstrap(populateConfig).then(async (_app) => {
+            await _app.get(JobQueueService).start();
+            return _app;
+          }),
+        initialData,
+        path.join(require.resolve("@vendure/create"), "../assets/products.csv")
+      );
+
+      try {
+        console.log("populating customers...");
+        await populateCustomers(app, 10, console.log);
+        config.authOptions.requireVerification = true;
+        return app.close();
+      } catch (err) {
+        console.log(err);
+        process.exit(1);
+      }
     }
   }
 }

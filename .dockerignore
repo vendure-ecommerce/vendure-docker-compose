@@ -8,5 +8,6 @@
 .idea
 node_modules
 dist
+assets
 __data__
 package-lock.json

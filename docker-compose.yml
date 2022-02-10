@@ -11,7 +11,7 @@ services:
       - /usr/src/app
     environment:
       DATABASE_HOST: database
-      DATABASE_PORT: 5432 
+      DATABASE_PORT: 5432
     depends_on:
       - database
       - worker
