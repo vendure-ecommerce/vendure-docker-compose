@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { bootstrap, defaultConfig, JobQueueService, mergeConfig, VendureConfig } from "@vendure/core";
-import { populate } from "@vendure/core/cli";
-import { clearAllTables, populateCustomers } from "@vendure/testing";
-import fs from "fs-extra";
-import path from "path";
-import { config } from "./vendure-config";
+import { bootstrap, defaultConfig, JobQueueService, mergeConfig, VendureConfig } from '@vendure/core';
+import { populate } from '@vendure/core/cli';
+import { clearAllTables, populateCustomers } from '@vendure/testing';
+import fs from 'fs-extra';
+import path from 'path';
+
+import { config } from './vendure-config';
 
 // tslint:disable:no-console
 
-const rootDir = path.join(__dirname, "..");
-const emailTemplateDir = path.join(rootDir, "static", "email", "templates");
+const rootDir = path.join(__dirname, '..');
+const emailTemplateDir = path.join(rootDir, 'static', 'email', 'templates');
 
 export async function setupWorker() {
     if (!fs.pathExistsSync(emailTemplateDir)) {
@@ -18,9 +19,9 @@ export async function setupWorker() {
 }
 
 export async function setupServer(populateInitial = true) {
-    console.log("isInitialRun:", isInitialRun());
+    console.log('isInitialRun:', isInitialRun());
     if (isInitialRun()) {
-        console.log("Initial run - populating test data...");
+        console.log('Initial run - populating test data...');
 
         await createDirectoryStructure();
         await copyEmailTemplates();
@@ -28,18 +29,18 @@ export async function setupServer(populateInitial = true) {
             defaultConfig,
             mergeConfig(config, {
                 authOptions: {
-                    tokenMethod: "bearer",
+                    tokenMethod: 'bearer',
                     requireVerification: false,
                 },
                 importExportOptions: {
-                    importAssetsDir: path.join(require.resolve("@vendure/create"), "../assets/images"),
+                    importAssetsDir: path.join(require.resolve('@vendure/create'), '../assets/images'),
                 },
                 customFields: {},
             })
         );
 
         if (populateInitial) {
-            const initialData = require(path.join(require.resolve("@vendure/create"), "../assets/initial-data.json"));
+            const initialData = require(path.join(require.resolve('@vendure/create'), '../assets/initial-data.json'));
 
             await clearAllTablesWithPolling(populateConfig);
 
@@ -50,11 +51,11 @@ export async function setupServer(populateInitial = true) {
                         return _app;
                     }),
                 initialData,
-                path.join(require.resolve("@vendure/create"), "../assets/products.csv")
+                path.join(require.resolve('@vendure/create'), '../assets/products.csv')
             );
 
             try {
-                console.log("populating customers...");
+                console.log('populating customers...');
                 await populateCustomers(app, 10, console.log);
                 config.authOptions.requireVerification = true;
                 return app.close();
@@ -74,18 +75,18 @@ function isInitialRun(): boolean {
  * Generate the default directory structure for a new Vendure project
  */
 async function createDirectoryStructure() {
-    await fs.ensureDir(path.join(rootDir, "static", "email", "test-emails"));
-    await fs.ensureDir(path.join(rootDir, "static", "assets"));
+    await fs.ensureDir(path.join(rootDir, 'static', 'email', 'test-emails'));
+    await fs.ensureDir(path.join(rootDir, 'static', 'assets'));
 }
 
 /**
  * Copy the email templates into the app
  */
 async function copyEmailTemplates() {
-    const templateDir = path.join(require.resolve("@vendure/email-plugin"), "../../templates");
+    const templateDir = path.join(require.resolve('@vendure/email-plugin'), '../../templates');
     try {
         await fs.copy(templateDir, emailTemplateDir);
-        console.log("Copied email templates to", templateDir);
+        console.log('Copied email templates to', templateDir);
     } catch (err) {
         console.error(`Failed to copy email templates.`, err);
     }

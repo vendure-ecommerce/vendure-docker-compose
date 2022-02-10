@@ -1,6 +1,6 @@
-import { bootstrap } from "@vendure/core";
-import { setupServer } from "./setup";
-import { config } from "./vendure-config";
+import { bootstrap } from '@vendure/core';
+import { setupServer } from './setup';
+import { config } from './vendure-config';
 
 setupServer()
     .then(() => bootstrap(config))
