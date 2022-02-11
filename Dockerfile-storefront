@@ -1,7 +1,9 @@
-FROM node:14
+FROM node:14.18.2-bullseye-slim
 ARG STOREFRONT_VERSION
 WORKDIR /usr/src/app
 
+RUN apt-get update
+RUN apt-get -y install curl unzip
 RUN echo $STOREFRONT_VERSION
 ARG ZIP_URL=https://github.com/vendure-ecommerce/storefront/archive/v$STOREFRONT_VERSION.zip
 RUN curl "$ZIP_URL" -L -o storefront.zip

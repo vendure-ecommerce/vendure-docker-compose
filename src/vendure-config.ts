@@ -1,6 +1,6 @@
-import { DefaultJobQueuePlugin, DefaultSearchPlugin, dummyPaymentHandler, VendureConfig, } from '@vendure/core';
-import { AssetServerPlugin } from '@vendure/asset-server-plugin';
 import { AdminUiPlugin } from '@vendure/admin-ui-plugin';
+import { AssetServerPlugin } from '@vendure/asset-server-plugin';
+import { DefaultJobQueuePlugin, DefaultSearchPlugin, dummyPaymentHandler, VendureConfig } from '@vendure/core';
 import { defaultEmailHandlers, EmailPlugin } from '@vendure/email-plugin';
 import path from 'path';
 
@@ -28,14 +28,13 @@ export const config: VendureConfig = {
             identifier: 'superadmin',
             password: 'superadmin',
         },
-        requireVerification: true,
         cookieOptions: {
-            secret: process.env.COOKIE_SECRET || '3r8wq8jdo92',
+            secret: process.env.COOKIE_SECRET || 'cookie-secret',
         },
     },
     dbConnectionOptions: {
         type: 'postgres',
-        synchronize: false, // turn this off for production
+        synchronize: true, // turn this off for production
         logging: false,
         database: 'vendure',
         host: process.env.DATABASE_HOST || 'localhost',
@@ -54,26 +53,25 @@ export const config: VendureConfig = {
             assetUploadDir: path.join(__dirname, '../static/assets'),
             assetUrlPrefix: 'http://localhost:3000/assets/',
         }),
-        DefaultJobQueuePlugin,
-        DefaultSearchPlugin,
-        AdminUiPlugin.init({
-            route: 'admin',
-            port: 3002,
-        }),
+        DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
+        DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
         EmailPlugin.init({
-            route: 'mailbox',
             devMode: true,
             outputPath: path.join(__dirname, '../static/email/test-emails'),
+            route: 'mailbox',
             handlers: defaultEmailHandlers,
             templatePath: path.join(__dirname, '../static/email/templates'),
             globalTemplateVars: {
                 // The following variables will change depending on your storefront implementation
                 fromAddress: '"example" <noreply@example.com>',
-                verifyEmailAddressUrl: 'http://localhost:8080/verify',
-                passwordResetUrl: 'http://localhost:8080/password-reset',
-                changeEmailAddressUrl: 'http://localhost:8080/verify-email-address-change'
+                verifyEmailAddressUrl: 'http://localhost:4000/account/verify',
+                passwordResetUrl: 'http://localhost:4000/account/reset-password',
+                changeEmailAddressUrl: 'http://localhost:8080/verify-email-address-change',
             },
+        }),
+        AdminUiPlugin.init({
+            route: 'admin',
+            port: 3002,
         }),
     ],
 };
-

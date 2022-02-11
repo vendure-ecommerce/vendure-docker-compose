@@ -3,3 +3,5 @@ node_modules
 /dist
 /static
 __data__
+.history
+package-lock.json

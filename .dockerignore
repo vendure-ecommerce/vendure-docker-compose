@@ -7,6 +7,7 @@
 
 .idea
 node_modules
-static
 dist
+assets
 __data__
+package-lock.json
