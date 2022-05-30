@@ -50,7 +50,7 @@ export async function setupServer() {
         );
         try {
             console.log('populating customers...');
-            await populateCustomers(10, populateConfig, true);
+            await populateCustomers(app, 10, message => console.log(message));
             config.authOptions.requireVerification = true;
             return app.close();
         } catch (err) {
