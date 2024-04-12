@@ -96,7 +96,8 @@ async function clearAllTablesWithPolling(populateConfig: VendureConfig) {
             await clearAllTables(populateConfig, true);
             return;
         } catch (e) {
-            console.log(`Could not clear tables: ${e.message}`);
+            const { message } = e as Error;
+            console.log(`Could not clear tables: ${message}`);
         }
     }
 }

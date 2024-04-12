@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
-    command: ["./wait-for-it.sh", "database:5432", "--", "yarn", "run:server"]
+    command: ["./wait-for-it.sh", "database:5432", "--", "yarn", "start:server"]
     volumes:
       - /usr/src/app
     environment:
@@ -19,7 +19,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: ["./wait-for-it.sh", "database:5432", "--", "yarn", "run:worker"]
+    command: ["./wait-for-it.sh", "database:5432", "--", "yarn", "start:worker"]
     volumes:
       - /usr/src/app
     environment:
@@ -32,7 +32,7 @@ services:
       context: .
       dockerfile: Dockerfile-storefront
       args:
-        STOREFRONT_VERSION: 0.1.27
+        STOREFRONT_VERSION: 0.3.1
     ports:
       - 4000:4000
     environment:
